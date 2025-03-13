@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recent Views - MultiView Web Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .bg-light-gray {
+      background-color: #f5f7fa;
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #718096;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    .nav-item.active {
+      color: #4299e1;
+    }
+    .free-badge {
+      background-color: #48bb78;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .empty-state {
+      padding: 3rem 0;
+      text-align: center;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .privacy-banner {
+      background-color: #ebf8ff;
+      border-left: 4px solid #4299e1;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body class="bg-light-gray">
+    <div class="container mx-auto px-4 pb-20">
+      <header class="bg-white shadow-md rounded-lg p-4 my-4 flex justify-between items-center">
+          <img src="MultiView Web Viewer.png" alt="MultiView Logo" class="logo w-12 h-12 mr-4">
+        <h1 class="text-2xl font-bold">Recent</h1>
+        <span class="free-badge">100% FREE</span>
+      </header>
+    </header>
+
+    <div class="privacy-banner rounded-lg">
+      <p class="text-blue-700">
+        <i class="fas fa-shield-alt mr-2"></i>
+        <strong>Privacy Focused:</strong> No data collection. Your browsing history stays on your device.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Recent Views</h2>
+        <div class="flex">
+          <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded px-3 py-1 mr-2 text-sm">
+            <i class="fas fa-sort-amount-down mr-1"></i> Sort
+          </button>
+          <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded px-3 py-1 text-sm">
+            <i class="fas fa-filter mr-1"></i> Filter
+          </button>
+        </div>
+      </div>
+
+      <div class="flex mb-4">
+        <div class="flex-1">
+          <input type="text" placeholder="Search recent views..." class="w-full p-2 border rounded-lg">
+        </div>
+      </div>
+
+      <div class="recent-views-container" id="recent-views-list">
+        <!-- Empty container for views to be populated by JavaScript -->
+      </div>
+
+      <!-- Empty state - can be shown/hidden with JavaScript -->
+      <div class="empty-state">
+        <div class="text-center py-8">
+          <i class="fas fa-history text-gray-300 text-5xl mb-4"></i>
+          <h3 class="text-lg font-medium text-gray-700">Recent Views</h3>
+          <p class="text-gray-500 mt-2">Your recently viewed pages will appear here</p>
+            <a href="index.html" class="text-blue-500 hover:underline block mt-2">Go to Home
+            </a>
+          </button>
+          </div>
+      </div>
+
+      <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
+        <span>Showing <span id="item-count">0</span> items</span>
+        <div class="flex items-center">
+          <button class="px-3 py-1 bg-gray-200 rounded-l hover:bg-gray-300" disabled>
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span class="px-3 py-1 bg-gray-100">1</span>
+          <button class="px-3 py-1 bg-gray-200 rounded-r hover:bg-gray-300" disabled>
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-semibold">Storage Usage</h2>
+        <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">100% FREE</span>
+      </div>
+      <div class="flex items-center">
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div id="storage-bar" class="bg-blue-500 h-3 rounded-full" style="width: 0%"></div>
+        </div>
+        <span id="storage-percentage" class="ml-3 text-sm">0%</span>
+      </div>
+      <p class="text-sm text-gray-600 mt-2">
+        <span id="storage-text">Using 0 MB of local storage</span>
+        <button id="clear-storage" class="text-blue-500 hover:text-blue-700 ml-2 text-sm">Clear All</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="recentviews.html" class="nav-item active">
+        <i class="fas fa-history"></i>
+        <span>Recent</span>
+      </a>
+      <a href="about.html" class="nav-item">
+        <i class="fas fa-info-circle"></i>
+        <span>About</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    function loadRecentViews() {
+        const recentViews = JSON.parse(localStorage.getItem('recentViews') || '[]');
+        const container = document.getElementById('recent-views-list');
+        
+        if (recentViews.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-500 py-8">No recent views found</p>';
+            return;
+        }
+        
+        container.innerHTML = recentViews.map((view, index) => `
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800 truncate">${view.url}</h3>
+                        <p class="text-sm text-gray-500">
+                            ${view.count} view${view.count > 1 ? 's' : ''} • 
+                            ${new Date(view.timestamp).toLocaleDateString()}
+                        </p>
+                    </div>
+                    <button onclick="reopenView(${index})" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Reopen
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function reopenView(index) {
+        const recentViews = JSON.parse(localStorage.getItem('recentViews') || '[]');
+        const view = recentViews[index];
+        if (view) {
+            window.location.href = `index.html?url=${encodeURIComponent(view.url)}&count=${view.count}`;
+        }
+    }
+
+    // Load recent views when page loads
+    loadRecentViews();
+
+    // Simple placeholder script to show/hide empty state
+    // The actual implementation will be done in your live version
+    document.addEventListener('DOMContentLoaded', function() {
+      const emptyState = document.querySelector('.empty-state');
+      const itemCount = document.getElementById('item-count');
+      
+      // Default to empty state
+      emptyState.style.display = 'block';
+      itemCount.textContent = '0';
+      
+      // Clear storage button
+      document.getElementById('clear-storage').addEventListener('click', function() {
+        if (confirm('Are you sure you want to clear all storage data?')) {
+          // You'll implement this in your live version
+          alert('Storage cleared successfully!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

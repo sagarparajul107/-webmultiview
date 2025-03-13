@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to MultiView</title>
+    <link rel="stylesheet" href="welcome-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="welcome-page">
+    <div class="welcome-container">
+        <img src="MultiView Web Viewer.png" alt="MultiView Logo" class="welcome-logo">
+        <h1>Welcome to MultiView</h1>
+        Made by Sagar Parajuli</p>
+        <div class="welcome-features">
+            <h3>Features</h3>
+            <ul>
+                <li><i class="fas fa-sync"></i> Automatic refresh cycles</li>
+                <li><i class="fas fa-chart-line"></i> View analytics dashboard</li>
+                <li><i class="fas fa-shield-alt"></i> Secure browsing</li>
+            </ul>
+        </div>
+        
+        <div class="privacy-disclaimer">
+            <label class="preference-item required">
+                <input type="checkbox" id="privacy-agreement" required>
+                <span class="checkbox-text">I acknowledge that MultiView is not responsible for the content of websites viewed through this service and I agree to the 
+                    <a href="privacy-policy.html">Privacy Policy</a> and 
+                    <a href="terms.html">Terms of Service</a>.</span>
+            </label>
+        </div>
+        
+        <button class="get-started-btn" onclick="validateAndStart()">Get Started <i class="fas fa-arrow-right"></i></button>
+        
+        <div class="version-info">
+            <p><a href="support.html">Support</a></p>
+        </div>
+    </div>
+    
+    <script>
+        function validateAndStart() {
+            const privacyCheckbox = document.getElementById('privacy-agreement');
+            if (privacyCheckbox.checked) {
+                localStorage.setItem('userOnboarded', 'true');
+                window.location.href = 'index.html';
+            } else {
+                alert('You must agree to the Privacy Policy and Terms of Service to continue.');
+            }
+        }
+    </script>
+</body>
+</html>

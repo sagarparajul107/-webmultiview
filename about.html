@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - MultiView</title>
+    <link rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+       
+
+.logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--primary-text);
+    font-weight: 600;
+}
+
+header p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Form Styles */
+.input-section {
+    max-width: 400px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+.button {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #357abd;
+}
+
+/* Views Container */
+.views-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 4rem;
+}
+
+.view-wrapper {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    height: 300px;
+}
+
+.view-wrapper:hover {
+    transform: translateY(-2px);
+}
+
+.view-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.frame-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.view-wrapper:hover .frame-controls {
+    opacity: 1;
+}
+
+.frame-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.frame-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Wrapper and Layout */
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 1rem;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.sidebar-nav a {
+    color: var(--sidebar-text);
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar-nav a.active {
+    background: rgba(255,255,255,0.2);
+    font-weight: bold;
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar {
+    width: 100px;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-header {
+    text-align: center;
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+.mobile-menu {
+    display: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    #url-form input,
+    #url-form button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .views-container {
+        grid-template-columns: 1fr;
+    }
+    iframe {
+        height: 300px;
+    }
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: var(--secondary-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    min-width: 300px;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.message {
+    text-align: center;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: var(--border-radius);
+}
+
+.message.error {
+    background-color: #ffe6e6;
+    color: #d63031;
+}
+
+.message.success {
+    background-color: #e6ffe6;
+    color: #27ae60;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .form {
+        gap: 0.8rem;
+    }
+    
+    .views-container {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .view-wrapper {
+        height: 250px;
+    }
+    
+    .popup-content {
+        width: 90%;
+        max-width: 400px;
+    }
+
+    header {
+        padding:  1rem;
+    }
+
+    .header-content h1 {
+        font-size: 1.1rem;
+    }
+
+    .header-content p {
+        font-size: 0.8rem;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .sidebar {
+        display: none;
+    }
+    
+    .mobile-menu {
+        display: block;
+    }
+
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 21px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .menu-toggle span {
+        width: 100%;
+        height: 3px;
+        background-color: #333;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .logo {
+        width: 45px;
+        height: 45px;
+    }
+    
+    h1 {
+        font-size: 1.2rem;
+    }
+    
+    header p {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 0.8rem 0.3rem;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.3rem;
+    }
+    
+    h1 {
+        font-size: 1.1rem;
+    }
+
+    .views-container {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+    }
+
+    .view-wrapper {
+        height: 200px;
+    }
+}
+
+/* Bottom Navigation Styles */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.nav-link {
+    color: #718096;
+    transition: color 0.3s;
+}
+
+.nav-link.active {
+    color: #4299e1;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --primary-color: #63b3ed;
+    --background-color: #1a202c;
+    --text-color: #f7fafc;
+}
+
+/* Progress Bar Styles */
+.progress-bar-container {
+    width: 100%;
+    background-color: #edf2f7;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease-in-out;
+}
+.free-badge {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 10px;
+}
+body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+            .logo {
+        width: 45px;
+        height: 45px;
+            }
+        .logo {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.3rem;
+        }
+        .logo {
+        width: 60px;
+        height: 60px;
+        }
+        .sidebar-header {
+         text-align: center;
+        }
+
+        .logo {
+          width: 80px;
+           height: auto;
+        }
+
+         .mobile-menu {
+          display: none;
+        }
+        .header {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 15px 0;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin-right: 15px;
+        }
+        .header-content h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+        .header-content p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+        .header-actions {
+            margin-left: auto;
+        }
+        .about-section {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        section {
+            margin-bottom: 25px;
+        }
+        section h2 {
+            color: #333;
+            font-size: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .feature-box {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #4285f4;
+        }
+        .feature-content {
+            flex: 1;
+        }
+        .testimonial {
+            background-color: #f0f0f0;
+            border-left: 4px solid #4285f4;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            padding: 10px 0;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-around;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #777;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .nav-item.active {
+            color: #4285f4;
+        }
+        .free-badge {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .privacy-box {
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <header class="header">
+                <img src="MultiView Web Viewer.png" alt="MultiView Logo" class="logo">
+                <div class="header-content">
+                    <h1>About</h1>
+                    <p>Made by Sagar Parajuli</p>
+                </div>
+                <div class="header-actions">
+                    <span class="free-badge"><i class="fas fa-gift"></i> 100% FREE</span>
+                </div>
+            </header>
+
+            <main class="about-section">
+                <section>
+                    <p><strong>MultiView Web Viewer</strong> is a versatile platform designed to provide seamless access to multiple web views simultaneously. It offers users the ability to interact with various web content in a unified interface, enhancing productivity and user experience.</p>
+                    
+                    <div class="privacy-box">
+                        <h3><i class="fas fa-shield-alt"></i> Privacy Guarantee</h3>
+                        <p><strong>Zero Data Collection:</strong> We do not collect, store, or track any of your browsing data. Your privacy is our priority.</p>
+                        <p><strong>100% Free:</strong> MultiView Web Viewer is completely free to use with no hidden costs, subscriptions, or in-app purchases.</p>
+                    </div>
+                    
+                    <p class="disclaimer"><strong>Disclaimer:</strong> We are not responsible for the content or security of the websites you choose to access using MultiView Web Viewer. Use it at your own risk.</p>
+                </section>
+
+                <section>
+                    <h2>How It Works</h2>
+                    <p>Simply input your desired website link and select how many views you need (enter 0 or more). You can select any number to open multiple web tabs based on your requirements.</p>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <div class="feature-content">
+                            <h3>Optimized Performance</h3>
+                            <p>MultiView Web Viewer uses advanced HTML, JS, and CSS technology to create independent web views that run efficiently even on low internet connections.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="feature-content">
+                            <h3>Device Friendly</h3>
+                            <p>Whether you have a standard device or a high-performance Android device, our app intelligently manages storage and performance for optimal experience.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Key Features</h2>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-columns"></i></div>
+                        <div class="feature-content">
+                            <h3>Multiple Simultaneous Views</h3>
+                            <p>Browse multiple websites at once without switching between tabs.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="feature-content">
+                            <h3>Fast Loading</h3>
+                            <p>Optimized for quick loading even with multiple web views open.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                        <div class="feature-content">
+                            <h3>Privacy Focused</h3>
+                            <p>No data collection, tracking, or monitoring of your browsing habits.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>What Our Users Say</h2>
+                    <div class="testimonial">
+                        "MultiView Web Viewer has completely changed how I work. Being able to see my email, documentation, and development environment all at once has boosted my productivity immensely." - Mr. Sailyo
+                    </div>
+                    <div class="testimonial">
+                        "As a researcher, I often need to compare multiple sources. This tool makes it so much easier than constantly switching between tabs or arranging windows manually." - Mr. Anujal Sharma
+                    </div>
+                    <div class="testimonial">
+                        "I love that it's completely free and doesn't collect my data. In today's world, that's rare and very much appreciated!" - Ms. Rita Poudel
+                    </div>
+                </section>
+
+                <section>
+                    <h2>About the Developer</h2>
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-user-circle"></i></div>
+                        <div class="feature-content">
+                            <p>MultiView Web Viewer is created and maintained by <strong>Sagar Parajuli</strong>, a passionate software developer dedicated to creating tools that enhance productivity and user experience while respecting user privacy.</p>
+                            <p>For any inquiries, you can contact us at: <a href="mailto:sagarparajuli154@gmail.com">sagarparajuli154@gmail.com</a></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Frequently Asked Questions</h2>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-question-circle"></i></div>
+                        <div class="feature-content">
+                            <h3>Is MultiView Web Viewer really free?</h3>
+                            <p>Yes, our application is 100% free with no hidden costs, subscriptions, or in-app purchases.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-question-circle"></i></div>
+                        <div class="feature-content">
+                            <h3>Do you collect any user data?</h3>
+                            <p>No, we do not collect, store, or track any of your browsing data or personal information.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-question-circle"></i></div>
+                        <div class="feature-content">
+                            <h3>How many web views can I open at once?</h3>
+                            <p>You can open as many as your device can handle. We recommend starting with 2-4 views for optimal performance.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <div class="nav-container">
+                    <a href="index.html" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="recentviews.html" class="nav-item">
+                        <i class="fas fa-history"></i>
+                        <span>Recent</span>
+                    </a>
+                    <a href="about.html" class="nav-item active">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </a>
+                    <a href="settings.html" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
